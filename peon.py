@@ -3,13 +3,14 @@ import pygame
 class Peon:
     def __init__(self, position):
         self.position = position
-        self.speed = 20
+        self.speed = 50
         self.selected = False
         self.pointA = pygame.Vector2(0, 0)
         self.pointB = pygame.Vector2(0, 0)
+        self.direction = pygame.Vector2(0, 0)
         self.gold = 0
         self.radius = 20
-        self.color = "red"
+        self.color = "blue"
         self.active = True
     
     def set_pointA(self, pointA1):
@@ -17,13 +18,24 @@ class Peon:
     
     def check_selection(self, keys):
         if keys[pygame.K_t]:
-            self.color = "blue"
+            self.color = "red"
             self.selected = True
         
         if keys[pygame.K_y]:
-            self.color = "red"
+            self.color = "blue"
             self.selected = False
-    
+
+    def check_selection_mouse(self, mouse_vec):        
+        distance = mouse_vec - self.position
+        
+        if distance.length_squared() <= (self.radius**2):             
+            self.selected = True
+            self.color = "red"
+        else :
+            self.selected = False
+            self.color = "blue"
+ 
+            
     def update_position(self, keys, dt):
         if keys[pygame.K_z]:
             self.position.y -= 300 * dt
@@ -41,8 +53,7 @@ class Peon:
                 criterion = float((self.radius + mine.radius)**2)
                 
                 if distance.length_squared() <= criterion:
-                    self.gold = 10
-                    print(self.gold)
+                    self.gold += 10
                     self.active = False
 
     def brings_back(self, keys, town):
@@ -52,11 +63,20 @@ class Peon:
                 criterion = float((self.radius + town.radius)**2)
                 
                 if distance.length_squared() <= criterion:
+                    town.gold += self.gold
                     self.gold = 0
-                    print(self.gold)  
-                    town.gold += 10
                     self.active = False
 
+    def moves_toward_B(self, dt):
+        if (self.pointB.x != 0) and (self.pointB.y != 0) :
+            distance = self.pointB - self.pointA
+            if distance.length_squared() > (self.radius**2)/10:
+                self.position += self.direction*self.speed*dt
+            else :
+                self.pointB.x = 0
+                self.pointB.y = 0
+                
+            
 
 
 

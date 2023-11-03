@@ -15,7 +15,7 @@ dt = 0
 time_elapsed_since_last_action = 0
 
 
-
+#Game Objects
 town_position = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 town = TownCenter(town_position)
 
@@ -28,8 +28,9 @@ places = [town, mine]
 
 peon_position = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 mypeon = Peon(peon_position)
-
 peons = [mypeon]
+
+selected_object = None
 
 def draw_list(mylist):
     for object in mylist:
@@ -45,12 +46,29 @@ def draw_gold(gold):
     screen.blit(txtsurf,(200 - txtsurf.get_width() // 2, 150 - txtsurf.get_height() // 2))
 
 
+
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        
+        if event.type == pygame.MOUSEBUTTONUP:
+            mouse_pos = pygame.mouse.get_pos()
+            mouse_vec =  pygame.Vector2(mouse_pos)
+            if event.button == 1:
+                mypeon.check_selection_mouse(mouse_vec)
+                if mypeon.selected:
+                    selected_object = mypeon
+                else :
+                    selected_object = None
+            elif event.button == 3:
+                if selected_object != None :
+                    selected_object.pointA = selected_object.position
+                    selected_object.pointB = mouse_vec
+                    selected_object.direction = selected_object.pointB - selected_object.pointA
+                    selected_object.direction = selected_object.direction.normalize()
 
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("purple")
@@ -67,6 +85,8 @@ while running:
         mypeon.update_position(keys, dt)
         mypeon.mines(keys, mine)
         mypeon.brings_back(keys, town)
+    
+    mypeon.moves_toward_B(dt)
     
     
     
