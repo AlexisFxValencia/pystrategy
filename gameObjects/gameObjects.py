@@ -28,4 +28,14 @@ class GameObjects:
                 pe.update_position(keys, dt)
                 pe.mines(keys, self.mine)
                 pe.brings_back(keys, self.town)
+            
+            pe.moves_toward_B(dt)
+    
+    def play_towns(self, keys, dt):
+        if self.town.selected:
+            if self.town.create_peon(keys):
+                peon_position_local =  pygame.Vector2(self.town.position.x, self.town.position.y) 
+                peon_position_local.x += self.town.radius
+                pe = Peon(peon_position_local)
+                self.peons.append(pe)
         

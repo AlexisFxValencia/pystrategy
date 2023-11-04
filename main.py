@@ -117,26 +117,10 @@ while running:
     draw_list(go.peons)
     draw_gold(go.town.gold)
     
-    
-
     keys = pygame.key.get_pressed()
-
     go.play_peons(keys, dt)
-    
-    
-        
-    for pe in go.peons:
-        pe.moves_toward_B(dt)
-    
-    if go.town.selected:
-        if go.town.create_peon(keys):
-            peon_position_local =  pygame.Vector2(town.position.x,town.position.y) 
-            peon_position_local.x += town.radius
-            pe = Peon(peon_position_local)
-            go.peons.append(pe)
-    
-    
-
+    go.play_towns(keys, dt)
+     
     # flip() the display to put your work on screen
     pygame.display.flip()
 
