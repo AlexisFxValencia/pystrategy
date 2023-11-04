@@ -35,9 +35,6 @@ else:
 go = GameObjects(screen)
 
 
-
-
-
 def share_data(myclient, mypeon):
     data = {"mypeon.position.x":mypeon.position.x, "mypeon.position.y":mypeon.position.y}
     json_data = json.dumps(data)
@@ -58,8 +55,7 @@ while running:
     # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
-            
+            running = False            
             myclient.leave_room()
         
         if event.type == pygame.MOUSEBUTTONUP:
@@ -95,10 +91,8 @@ while running:
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("purple")    
     go.draw(screen)
+    go.plays(dt)
     
-    keys = pygame.key.get_pressed()
-    go.play_peons(keys, dt)
-    go.play_towns(keys, dt)
      
     # flip() the display to put your work on screen
     pygame.display.flip()
@@ -112,6 +106,7 @@ while running:
     # dt is measured in milliseconds, therefore 250 ms = 0.25 seconds
     if time_elapsed_since_last_action > 1:
         go.reactivate_peons()
+        go.reactivate_places()
         time_elapsed_since_last_action = 0 # reset it to 0 so you can count again
         share_data(myclient, go.peons[0])
 

@@ -37,7 +37,7 @@ class Peon(Place):
                 criterion = float((self.radius + mine.radius)**2)
                 
                 if distance.length_squared() <= criterion:
-                    self.gold += 10
+                    self.gold = 10
                     self.active = False
 
     def brings_back(self, keys, town):

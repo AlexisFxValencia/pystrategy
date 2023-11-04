@@ -10,10 +10,12 @@ class TownCenter(Place):
         self.gold = 133
         
     def create_peon(self, keys):
-        if keys[pygame.K_m]:
-            if self.gold > 50:
-                self.gold -= 50
-                return True
+        if self.active:
+            if keys[pygame.K_m]:
+                if self.gold > 50:
+                    self.gold -= 50
+                    self.active = False
+                    return True
         return False
             
     

@@ -39,7 +39,11 @@ class GameObjects:
         txtsurf = font.render("Gold = " + str(gold), True, 'white')
         screen.blit(txtsurf,(200 - txtsurf.get_width() // 2, 150 - txtsurf.get_height() // 2))
 
-
+    def plays(self, dt):
+        keys = pygame.key.get_pressed()
+        self.play_peons(keys, dt)
+        self.play_towns(keys, dt)
+    
     def play_peons(self, keys, dt):
         for pe in self.peons:
             if pe.selected:
@@ -60,3 +64,7 @@ class GameObjects:
     def reactivate_peons(self):
         for peon in self.peons:
             peon.active = True
+    
+    def reactivate_places(self):
+        for place in self.places:
+            place.active = True
