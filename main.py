@@ -1,9 +1,13 @@
 # Example file showing a circle moving on screen
 import pygame
 
-from townCenter import TownCenter
-from goldMine import GoldMine
-from peon import Peon
+from gameObjects.townCenter import TownCenter
+from gameObjects.goldMine import GoldMine
+from gameObjects.peon import Peon
+
+from client import *
+from random import randint
+
 
 # pygame setup
 pygame.init()
@@ -14,6 +18,23 @@ dt = 0
 
 time_elapsed_since_last_action = 0
 
+#creating a room or joining the first available room
+client_port = randint(500, 2000)
+server_port = 1234
+server_ip = "127.0.0.1"
+myclient = Client(server_ip, server_port, server_port, client_port)
+
+print("Client 1 : %s" % myclient.identifier)
+rooms = myclient.get_rooms()
+print(rooms)
+if len(rooms) == 0:
+    myclient.create_room("Test room")
+    print("myclient creates room  %s" % myclient.room_id)
+    rooms = myclient.get_rooms()
+else:
+    selected_room = rooms[0]['id']
+    myclient.join_room(selected_room)
+    print("myclient joins room  %s" % myclient.room_id)
 
 #Game Objects
 town_position = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
