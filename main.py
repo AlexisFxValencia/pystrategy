@@ -1,9 +1,8 @@
 # Example file showing a circle moving on screen
 import pygame
 
-from gameObjects.townCenter import TownCenter
-from gameObjects.goldMine import GoldMine
-from gameObjects.peon import Peon
+
+from gameObjects.gameObjects import GameObjects
 
 from client import *
 from random import randint
@@ -37,23 +36,9 @@ else:
     print("myclient joins room  %s" % myclient.room_id)
 
 
-#Creating game objects
-town_position = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
-town = TownCenter(town_position)
+go = GameObjects(screen)
 
-mine_position = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
-mine_position.x+= 400
-mine_position.y+= 200
-mine = GoldMine(mine_position)
 
-places = [town, mine]
-
-peon_position = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
-mypeon = Peon(peon_position)
-peons = [mypeon]
-
-selected_object = None
-selected_z = -1
 
 
 def draw_list(mylist):
@@ -101,56 +86,56 @@ while running:
             
             if event.button == 1: #left click
                 local_selected = None
-                for p in peons:
+                for p in go.peons:
                     p.selected = False
                     p.check_selection_mouse(mouse_vec)                    
                     if p.selected:
-                        selected_z = p.z
+                        go.selected_z = p.z
                         local_selected = p
-                for pl in places:
+                for pl in go.places:
                     pl.selected = False
-                    if pl.z > selected_z:
+                    if pl.z > go.selected_z:
                         pl.check_selection_mouse(mouse_vec)   
                         if pl.selected:
-                            selected_z = pl.z
+                            go.selected_z = pl.z
                             local_selected = pl
                             
-                selected_object = local_selected
-                selected_z = -1 
+                go.selected_object = local_selected
+                go.selected_z = -1 
                 
             elif event.button == 3: #right click
-                if selected_object != None :
-                    selected_object.pointA = selected_object.position
-                    selected_object.pointB = mouse_vec
-                    selected_object.direction = selected_object.pointB - selected_object.pointA
-                    selected_object.direction = selected_object.direction.normalize()
+                if go.selected_object != None :
+                    go.selected_object.pointA = go.selected_object.position
+                    go.selected_object.pointB = mouse_vec
+                    go.selected_object.direction = go.selected_object.pointB - go.selected_object.pointA
+                    go.selected_object.direction = go.selected_object.direction.normalize()
 
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("purple")
     
-    draw_list(places)
-    draw_list(peons)
-    draw_gold(town.gold)
+    draw_list(go.places)
+    draw_list(go.peons)
+    draw_gold(go.town.gold)
     
     
 
     keys = pygame.key.get_pressed()
-    mypeon.check_selection(keys)
-    for pe in peons:
+
+    for pe in go.peons:
         if pe.selected:
             pe.update_position(keys, dt)
-            pe.mines(keys, mine)
-            pe.brings_back(keys, town)
+            pe.mines(keys, go.mine)
+            pe.brings_back(keys, go.town)
         
-    for pe in peons:
+    for pe in go.peons:
         pe.moves_toward_B(dt)
     
-    if town.selected:
-        if town.create_peon(keys):
+    if go.town.selected:
+        if go.town.create_peon(keys):
             peon_position_local =  pygame.Vector2(town.position.x,town.position.y) 
             peon_position_local.x += town.radius
             pe = Peon(peon_position_local)
-            peons.append(pe)
+            go.peons.append(pe)
     
     
 
@@ -168,9 +153,9 @@ while running:
     # dt is measured in milliseconds, therefore 250 ms = 0.25 seconds
     if time_elapsed_since_last_action > 1:
         #print(time_elapsed_since_last_action)
-        activate_list(peons)
+        activate_list(go.peons)
         time_elapsed_since_last_action = 0 # reset it to 0 so you can count again
-        share_data(myclient, mypeon)
+        share_data(myclient, go.peons[0])
 
 
 
