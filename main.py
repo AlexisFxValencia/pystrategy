@@ -35,10 +35,12 @@ else:
 go = GameObjects(screen)
 
 
-def share_data(myclient, mypeon):
-    data = {"mypeon.position.x":mypeon.position.x, "mypeon.position.y":mypeon.position.y}
+def send_data(myclient, go):
+    data = go.write_data()
     json_data = json.dumps(data)
     myclient.send(json_data)
+
+def receive_data(myclient):
     messages = myclient.get_messages()
     if len(messages) != 0:
         for message in messages:
@@ -47,7 +49,9 @@ def share_data(myclient, mypeon):
             print(sender)
             print(myclient.identifier)
             data = json.loads(value)
-            print(data["mypeon.position.x"])
+            data = {int(k):v for k,v in data.items()}
+            print(data)
+            #print(str(data[1]["type"]) + ' ' + str(data[1]["x"]))
 
 
 while running:
@@ -60,33 +64,12 @@ while running:
         
         if event.type == pygame.MOUSEBUTTONUP:
             mouse_pos = pygame.mouse.get_pos()
-            mouse_vec =  pygame.Vector2(mouse_pos)
-            
+            mouse_vec =  pygame.Vector2(mouse_pos)            
             if event.button == 1: #left click
-                local_selected = None
-                for p in go.peons:
-                    p.selected = False
-                    p.check_selection_mouse(mouse_vec)                    
-                    if p.selected:
-                        go.selected_z = p.z
-                        local_selected = p
-                for pl in go.places:
-                    pl.selected = False
-                    if pl.z > go.selected_z:
-                        pl.check_selection_mouse(mouse_vec)   
-                        if pl.selected:
-                            go.selected_z = pl.z
-                            local_selected = pl
-                            
-                go.selected_object = local_selected
-                go.selected_z = -1 
-                
+                go.update_selected_object(mouse_vec)                                
             elif event.button == 3: #right click
-                if go.selected_object != None :
-                    go.selected_object.pointA = go.selected_object.position
-                    go.selected_object.pointB = mouse_vec
-                    go.selected_object.direction = go.selected_object.pointB - go.selected_object.pointA
-                    go.selected_object.direction = go.selected_object.direction.normalize()
+                go.update_automated_movement(mouse_vec)
+                
 
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("purple")    
@@ -108,7 +91,9 @@ while running:
         go.reactivate_peons()
         go.reactivate_places()
         time_elapsed_since_last_action = 0 # reset it to 0 so you can count again
-        share_data(myclient, go.peons[0])
+        
+        send_data(myclient, go)
+        receive_data(myclient)
 
 
 

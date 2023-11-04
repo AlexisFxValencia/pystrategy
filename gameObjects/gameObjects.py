@@ -6,6 +6,9 @@ from gameObjects.peon import Peon
 
 class GameObjects:
     def __init__(self, screen):
+        self.selected_object = None
+        self.selected_z = -1
+        
         #Creating game objects
         town_position = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
         self.town = TownCenter(town_position)
@@ -19,8 +22,7 @@ class GameObjects:
         mypeon = Peon(peon_position)
         self.peons = [mypeon]
         
-        self.selected_object = None
-        self.selected_z = -1
+        
     
     def draw(self, screen):
         self.draw_list(screen, self.places)
@@ -68,3 +70,34 @@ class GameObjects:
     def reactivate_places(self):
         for place in self.places:
             place.active = True
+
+    def update_selected_object(self, mouse_vec):
+        local_selected = None
+        for p in self.peons:
+            p.selected = False
+            p.check_selection_mouse(mouse_vec)                    
+            if p.selected:
+                self.selected_z = p.z
+                local_selected = p
+        for pl in self.places:
+            pl.selected = False
+            if pl.z > self.selected_z:
+                pl.check_selection_mouse(mouse_vec)   
+                if pl.selected:
+                    self.selected_z = pl.z
+                    local_selected = pl
+                    
+        self.selected_object = local_selected
+        self.selected_z = -1 
+    
+    def update_automated_movement(mouse_vec):
+        if self.selected_object != None :
+            self.selected_object.pointA = self.selected_object.position
+            self.selected_object.pointB = mouse_vec
+            self.selected_object.direction = self.selected_object.pointB - self.selected_object.pointA
+            self.selected_object.direction = self.selected_object.direction.normalize()
+            
+    def write_data(self):    
+        mypeon = self.peons[0]
+        data = {1 : {"type" : "peon", "id" : 1, "x" : mypeon.position.x, "y" : mypeon.position.y}}
+        return data
