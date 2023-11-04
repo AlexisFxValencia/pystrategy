@@ -31,7 +31,7 @@ else:
     myclient.join_room(selected_room)
     print("myclient joins room  %s" % myclient.room_id)
 
-
+other_player_data = None
 go = GameObjects(screen)
 
 
@@ -46,11 +46,12 @@ def receive_data(myclient):
         for message in messages:
             message = json.loads(message)
             sender, value = message.popitem()
-            print(sender)
-            print(myclient.identifier)
+            #print(sender)
+            #print(myclient.identifier)
             data = json.loads(value)
             data = {int(k):v for k,v in data.items()}
-            print(data)
+            return data 
+            #print(data)
             #print(str(data[1]["type"]) + ' ' + str(data[1]["x"]))
 
 
@@ -74,6 +75,8 @@ while running:
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("purple")    
     go.draw(screen)
+    print(other_player_data)
+    go.draw_other_players(screen, other_player_data)
     go.plays(dt)
     
      
@@ -93,7 +96,7 @@ while running:
         time_elapsed_since_last_action = 0 # reset it to 0 so you can count again
         
         send_data(myclient, go)
-        receive_data(myclient)
+        other_player_data = receive_data(myclient)
 
 
 

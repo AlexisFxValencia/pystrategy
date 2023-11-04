@@ -98,6 +98,21 @@ class GameObjects:
             self.selected_object.direction = self.selected_object.direction.normalize()
             
     def write_data(self):    
-        mypeon = self.peons[0]
-        data = {1 : {"type" : "peon", "id" : 1, "x" : mypeon.position.x, "y" : mypeon.position.y}}
+        #first_peon = self.peons[0]
+        data = {}
+        for i, pe in enumerate(self.peons):
+            temp = {i : {"type" : "peon", "id" : 1, "x" : pe.position.x, "y" : pe.position.y}}
+            data.update(temp)
         return data
+    
+    def draw_other_players(self, screen, data):
+        if data != None and len(data) > 0 :
+            print("data not empty.")
+            for key in data:
+                print(key)
+                if data[key]["type"] == "peon":
+                    color = "red"
+                    position = pygame.Vector2(data[key]["x"], data[key]["y"]) 
+                    radius = 20
+                    pygame.draw.circle(screen, color, position, radius)
+                

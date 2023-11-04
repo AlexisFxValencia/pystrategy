@@ -8,6 +8,8 @@ A simple strategy game using pygame
  - uniformisation of object selection with the mouse
  - design : surrounding ring to select an object rather than changing its color
  - ability to create a peon from town
+ - gameObject to handle all the objects created in the game (places, peons) and simplify main.py
+ - draw other player's peon.
 
 
 
