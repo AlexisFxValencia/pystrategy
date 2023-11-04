@@ -121,11 +121,9 @@ while running:
 
     keys = pygame.key.get_pressed()
 
-    for pe in go.peons:
-        if pe.selected:
-            pe.update_position(keys, dt)
-            pe.mines(keys, go.mine)
-            pe.brings_back(keys, go.town)
+    go.play_peons(keys, dt)
+    
+    
         
     for pe in go.peons:
         pe.moves_toward_B(dt)

@@ -21,4 +21,11 @@ class GameObjects:
         
         self.selected_object = None
         self.selected_z = -1
+    
+    def play_peons(self, keys, dt):
+        for pe in self.peons:
+            if pe.selected:
+                pe.update_position(keys, dt)
+                pe.mines(keys, self.mine)
+                pe.brings_back(keys, self.town)
         
