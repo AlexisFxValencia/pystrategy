@@ -7,7 +7,7 @@ from gameObjects.peon import Peon
 
 from client import *
 from random import randint
-
+import json
 
 # pygame setup
 pygame.init()
@@ -15,8 +15,8 @@ screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
 dt = 0
-
 time_elapsed_since_last_action = 0
+
 
 #creating a room or joining the first available room
 client_port = randint(500, 2000)
@@ -36,7 +36,8 @@ else:
     myclient.join_room(selected_room)
     print("myclient joins room  %s" % myclient.room_id)
 
-#Game Objects
+
+#Creating game objects
 town_position = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 town = TownCenter(town_position)
 
@@ -54,6 +55,7 @@ peons = [mypeon]
 selected_object = None
 selected_z = -1
 
+
 def draw_list(mylist):
     for object in mylist:
         pygame.draw.circle(screen, object.unselected_color, object.position, object.radius)
@@ -69,6 +71,19 @@ def draw_gold(gold):
     txtsurf = font.render("Gold = " + str(gold), True, 'white')
     screen.blit(txtsurf,(200 - txtsurf.get_width() // 2, 150 - txtsurf.get_height() // 2))
 
+def share_data(myclient, mypeon):
+    data = {"mypeon.position.x":mypeon.position.x, "mypeon.position.y":mypeon.position.y}
+    json_data = json.dumps(data)
+    myclient.send(json_data)
+    messages = myclient.get_messages()
+    if len(messages) != 0:
+        for message in messages:
+            message = json.loads(message)
+            sender, value = message.popitem()
+            print(sender)
+            print(myclient.identifier)
+            data = json.loads(value)
+            print(data["mypeon.position.x"])
 
 
 while running:
@@ -77,6 +92,8 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+            
+            myclient.leave_room()
         
         if event.type == pygame.MOUSEBUTTONUP:
             mouse_pos = pygame.mouse.get_pos()
@@ -153,6 +170,9 @@ while running:
         #print(time_elapsed_since_last_action)
         activate_list(peons)
         time_elapsed_since_last_action = 0 # reset it to 0 so you can count again
+        share_data(myclient, mypeon)
+
+
 
 
 pygame.quit()
