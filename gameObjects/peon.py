@@ -31,7 +31,7 @@ class Peon(Place):
             self.position.x += 300 * dt
     
     def mines(self, keys, mine):
-        if self.active:
+        if self.active and self.gold < 10:
             if keys[pygame.K_m]:
                 distance = self.position - mine.position
                 criterion = float((self.radius + mine.radius)**2)
@@ -41,7 +41,7 @@ class Peon(Place):
                     self.active = False
 
     def brings_back(self, keys, town):
-        if self.active:
+        if self.active and self.gold > 0:
             if keys[pygame.K_m]:
                 distance = self.position - town.position
                 criterion = float((self.radius + town.radius)**2)

@@ -1,9 +1,5 @@
-# Example file showing a circle moving on screen
 import pygame
-
-
 from gameObjects.gameObjects import GameObjects
-
 from client import *
 from random import randint
 import json
@@ -47,9 +43,6 @@ def draw_list(mylist):
         if object.selected:
             pygame.draw.circle(screen, object.selected_color, object.position, object.radius, 5)
 
-def activate_list(mylist):
-    for object in mylist:
-        object.active = True
 
 def draw_gold(gold):
     font = pygame.font.SysFont("Arial", 36)
@@ -127,15 +120,12 @@ while running:
     # limits FPS to 60
     # dt is delta time in seconds since last frame, used for framerate-
     # independent physics.
-    dt = clock.tick(60) / 1000
-    
-    
+    dt = clock.tick(60) / 1000    
     time_elapsed_since_last_action += dt
     
     # dt is measured in milliseconds, therefore 250 ms = 0.25 seconds
     if time_elapsed_since_last_action > 1:
-        #print(time_elapsed_since_last_action)
-        activate_list(go.peons)
+        go.reactivate_peons()
         time_elapsed_since_last_action = 0 # reset it to 0 so you can count again
         share_data(myclient, go.peons[0])
 

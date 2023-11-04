@@ -38,4 +38,7 @@ class GameObjects:
                 peon_position_local.x += self.town.radius
                 pe = Peon(peon_position_local)
                 self.peons.append(pe)
-        
+    
+    def reactivate_peons(self):
+        for peon in self.peons:
+            peon.active = True
