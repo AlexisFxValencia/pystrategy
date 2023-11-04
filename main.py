@@ -37,17 +37,6 @@ go = GameObjects(screen)
 
 
 
-def draw_list(mylist):
-    for object in mylist:
-        pygame.draw.circle(screen, object.unselected_color, object.position, object.radius)
-        if object.selected:
-            pygame.draw.circle(screen, object.selected_color, object.position, object.radius, 5)
-
-
-def draw_gold(gold):
-    font = pygame.font.SysFont("Arial", 36)
-    txtsurf = font.render("Gold = " + str(gold), True, 'white')
-    screen.blit(txtsurf,(200 - txtsurf.get_width() // 2, 150 - txtsurf.get_height() // 2))
 
 def share_data(myclient, mypeon):
     data = {"mypeon.position.x":mypeon.position.x, "mypeon.position.y":mypeon.position.y}
@@ -104,11 +93,8 @@ while running:
                     go.selected_object.direction = go.selected_object.direction.normalize()
 
     # fill the screen with a color to wipe away anything from last frame
-    screen.fill("purple")
-    
-    draw_list(go.places)
-    draw_list(go.peons)
-    draw_gold(go.town.gold)
+    screen.fill("purple")    
+    go.draw(screen)
     
     keys = pygame.key.get_pressed()
     go.play_peons(keys, dt)

@@ -22,6 +22,24 @@ class GameObjects:
         self.selected_object = None
         self.selected_z = -1
     
+    def draw(self, screen):
+        self.draw_list(screen, self.places)
+        self.draw_list(screen, self.peons)
+        self.draw_gold(screen, self.town.gold)
+    
+    def draw_list(self, screen, mylist):
+        for object in mylist:
+            pygame.draw.circle(screen, object.unselected_color, object.position, object.radius)
+            if object.selected:
+                pygame.draw.circle(screen, object.selected_color, object.position, object.radius, 5)
+
+
+    def draw_gold(self, screen, gold):
+        font = pygame.font.SysFont("Arial", 36)
+        txtsurf = font.render("Gold = " + str(gold), True, 'white')
+        screen.blit(txtsurf,(200 - txtsurf.get_width() // 2, 150 - txtsurf.get_height() // 2))
+
+
     def play_peons(self, keys, dt):
         for pe in self.peons:
             if pe.selected:
