@@ -4,11 +4,18 @@ from place import Place
 class TownCenter(Place):
     def __init__(self, myposition):
         super().__init__(myposition)
-        self.radius = 120
-        self.color = "green"        
-        self.gold = 33
+        self.radius = 120        
+        self.unselected_color = "green"
+        self.selected_color = "red"        
+        self.gold = 133
         
-    
+    def create_peon(self, keys):
+        if keys[pygame.K_m]:
+            if self.gold > 50:
+                self.gold -= 50
+                return True
+        return False
+            
     
     
     

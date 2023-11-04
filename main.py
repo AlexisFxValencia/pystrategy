@@ -31,10 +31,13 @@ mypeon = Peon(peon_position)
 peons = [mypeon]
 
 selected_object = None
+selected_z = -1
 
 def draw_list(mylist):
     for object in mylist:
-        pygame.draw.circle(screen, object.color, object.position, object.radius)
+        pygame.draw.circle(screen, object.unselected_color, object.position, object.radius)
+        if object.selected:
+            pygame.draw.circle(screen, object.selected_color, object.position, object.radius, 5)
 
 def activate_list(mylist):
     for object in mylist:
@@ -57,13 +60,27 @@ while running:
         if event.type == pygame.MOUSEBUTTONUP:
             mouse_pos = pygame.mouse.get_pos()
             mouse_vec =  pygame.Vector2(mouse_pos)
-            if event.button == 1:
-                mypeon.check_selection_mouse(mouse_vec)
-                if mypeon.selected:
-                    selected_object = mypeon
-                else :
-                    selected_object = None
-            elif event.button == 3:
+            
+            if event.button == 1: #left click
+                local_selected = None
+                for p in peons:
+                    p.selected = False
+                    p.check_selection_mouse(mouse_vec)                    
+                    if p.selected:
+                        selected_z = p.z
+                        local_selected = p
+                for pl in places:
+                    pl.selected = False
+                    if pl.z > selected_z:
+                        pl.check_selection_mouse(mouse_vec)   
+                        if pl.selected:
+                            selected_z = pl.z
+                            local_selected = pl
+                            
+                selected_object = local_selected
+                selected_z = -1 
+                
+            elif event.button == 3: #right click
                 if selected_object != None :
                     selected_object.pointA = selected_object.position
                     selected_object.pointB = mouse_vec
@@ -81,14 +98,21 @@ while running:
 
     keys = pygame.key.get_pressed()
     mypeon.check_selection(keys)
-    if mypeon.selected:
-        mypeon.update_position(keys, dt)
-        mypeon.mines(keys, mine)
-        mypeon.brings_back(keys, town)
+    for pe in peons:
+        if pe.selected:
+            pe.update_position(keys, dt)
+            pe.mines(keys, mine)
+            pe.brings_back(keys, town)
+        
+    for pe in peons:
+        pe.moves_toward_B(dt)
     
-    mypeon.moves_toward_B(dt)
-    
-    
+    if town.selected:
+        if town.create_peon(keys):
+            peon_position_local =  pygame.Vector2(town.position.x,town.position.y) 
+            peon_position_local.x += town.radius
+            pe = Peon(peon_position_local)
+            peons.append(pe)
     
     
 

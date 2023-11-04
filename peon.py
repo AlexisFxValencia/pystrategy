@@ -1,40 +1,24 @@
 import pygame
 
-class Peon:
+from place import Place
+
+class Peon(Place):
     def __init__(self, position):
-        self.position = position
+        super().__init__(position)
+        self.radius = 20
+        self.unselected_color = "blue"
+        self.selected_color = "red"
+        
         self.speed = 50
-        self.selected = False
         self.pointA = pygame.Vector2(0, 0)
         self.pointB = pygame.Vector2(0, 0)
         self.direction = pygame.Vector2(0, 0)
         self.gold = 0
-        self.radius = 20
-        self.color = "blue"
-        self.active = True
+        self.z = 10
     
     def set_pointA(self, pointA1):
         self.pointA = pointA1
     
-    def check_selection(self, keys):
-        if keys[pygame.K_t]:
-            self.color = "red"
-            self.selected = True
-        
-        if keys[pygame.K_y]:
-            self.color = "blue"
-            self.selected = False
-
-    def check_selection_mouse(self, mouse_vec):        
-        distance = mouse_vec - self.position
-        
-        if distance.length_squared() <= (self.radius**2):             
-            self.selected = True
-            self.color = "red"
-        else :
-            self.selected = False
-            self.color = "blue"
- 
             
     def update_position(self, keys, dt):
         if keys[pygame.K_z]:

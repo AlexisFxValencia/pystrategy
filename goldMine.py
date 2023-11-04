@@ -5,7 +5,9 @@ class GoldMine(Place):
     def __init__(self, myposition):
         super().__init__(myposition)
         self.radius = 80
-        self.color = "yellow"        
+        self.unselected_color = "gold"
+        self.selected_color = "red"   
+        
         self.gold = 20000
         
     
