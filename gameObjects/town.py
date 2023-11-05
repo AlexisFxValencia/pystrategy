@@ -1,8 +1,8 @@
 import pygame
-from gameObjects.place import Place
+from gameObjects.mapObject import MapObject
 from gameObjects.constants import *
 
-class TownCenter(Place):
+class Town(MapObject):
     def __init__(self, myposition):
         super().__init__(myposition)
         self.radius = TOWN_RADIUS        

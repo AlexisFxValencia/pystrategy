@@ -1,7 +1,7 @@
 
 import pygame
-from gameObjects.townCenter import TownCenter
-from gameObjects.goldMine import GoldMine
+from gameObjects.town import Town
+from gameObjects.mine import Mine
 from gameObjects.peon import Peon
 
 class GameObjects:
@@ -35,14 +35,14 @@ class GameObjects:
     
     def create_first_buildings(self):
         town_position = pygame.Vector2(self.map_center.x, self.map_center.y)
-        town = TownCenter(town_position)
+        town = Town(town_position)
         self.buildings.append(town)
     
     def create_map(self):
         mine_position = pygame.Vector2(self.map_center.x, self.map_center.y)
         mine_position.x+= 400
         mine_position.y+= 200
-        mine = GoldMine(mine_position)
+        mine = Mine(mine_position)
         self.map_objects.append(mine)
 
     def draws(self, screen):
@@ -80,15 +80,15 @@ class GameObjects:
             
     
     def play_towns(self, keys, dt):
-        if isinstance(self.selected_object, TownCenter):
-            town = self.selected_object
-            if town.selected:
-                if town.create_peon(keys):
-                    peon_position_local =  pygame.Vector2(town.position.x, town.position.y) 
-                    peon_position_local.x += town.radius
-                    pe = Peon(peon_position_local)
-                    self.peons.append(pe)
-    
+        if isinstance(self.selected_object, Town):
+            town = self.selected_object            
+            if town.create_peon(keys):
+                peon_position_local =  pygame.Vector2(town.position.x, town.position.y) 
+                peon_position_local.x += town.radius
+                pe = Peon(peon_position_local)
+                self.peons.append(pe)
+                town.active = False
+
     def reactivate_peons(self):
         for peon in self.peons:
             peon.active = True

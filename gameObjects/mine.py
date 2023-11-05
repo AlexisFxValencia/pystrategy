@@ -1,8 +1,8 @@
 import pygame
-from gameObjects.place import Place
+from gameObjects.mapObject import MapObject
 from gameObjects.constants import *
 
-class GoldMine(Place):
+class Mine(MapObject):
     def __init__(self, myposition):
         super().__init__(myposition)
         self.radius = MINE_RADIUS

@@ -1,6 +1,6 @@
 import pygame
 
-class Place:
+class MapObject:
     def __init__(self, myposition):
         self.position = myposition
         self.radius = 20
