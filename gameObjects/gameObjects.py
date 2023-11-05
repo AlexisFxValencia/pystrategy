@@ -4,11 +4,18 @@ from gameObjects.town import Town
 from gameObjects.mine import Mine
 from gameObjects.peon import Peon
 
+from gameObjects.constants import *
+
 class GameObjects:
-    def __init__(self, screen):
+    def __init__(self, screen, n_player):
         self.map_center = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
         self.map_width = screen.get_width()
         self.map_height = screen.get_height()
+        
+        if n_player == 1:
+            self.player_center = pygame.Vector2(PLAYER_1_X * screen.get_width(), PLAYER_1_Y * screen.get_height())
+        elif n_player ==2 : 
+            self.player_center = pygame.Vector2(PLAYER_2_X * screen.get_width(), PLAYER_2_Y * screen.get_height())
         
         self.selected_object = None
         self.selected_z = -1
@@ -27,21 +34,21 @@ class GameObjects:
         
     def create_first_peons(self, n):
         for i in range(n):
-            peon_position = pygame.Vector2(self.map_center.x, self.map_center.y)
+            peon_position = pygame.Vector2(self.player_center.x, self.player_center.y)
             peon_position.x += 50*i
             peon = Peon(peon_position)
             peon.z += i            
             self.peons.append(peon)
     
     def create_first_buildings(self):
-        town_position = pygame.Vector2(self.map_center.x, self.map_center.y)
+        town_position = pygame.Vector2(self.player_center.x, self.player_center.y)
         town = Town(town_position)
         self.buildings.append(town)
     
     def create_map(self):
         mine_position = pygame.Vector2(self.map_center.x, self.map_center.y)
-        mine_position.x+= 400
-        mine_position.y+= 200
+        #mine_position.x+= 400
+        #mine_position.y+= 200
         mine = Mine(mine_position)
         self.map_objects.append(mine)
 
@@ -142,9 +149,8 @@ class GameObjects:
     
     def draws_other_players(self, screen, data):
         if data != None and len(data) > 0 :
-            print("data not empty.")
             for key in data:
-                print(key)
+                #print(key)
                 if data[key]["type"] == "peon":
                     color = "red"
                     position = pygame.Vector2(data[key]["x"], data[key]["y"]) 

@@ -11,7 +11,7 @@ clock = pygame.time.Clock()
 running = True
 dt = 0
 time_elapsed_since_last_action = 0
-
+n_player = 1
 
 #creating a room or joining the first available room
 client_port = randint(500, 2000)
@@ -29,10 +29,15 @@ if len(rooms) == 0:
 else:
     selected_room = rooms[0]['id']
     myclient.join_room(selected_room)
-    print("myclient joins room  %s" % myclient.room_id)
+    print("myclient joins room  %s" % myclient.room_id)    
+    nb_players = myclient.get_nb_players_in_room()    
+    #print(rooms[0]['nb_players'])    
+    n_player = int(nb_players)
 
 other_player_data = None
-go = GameObjects(screen)
+
+print("I am player = " + n_player)
+go = GameObjects(screen, n_player)
 
 
 def send_data(myclient, go):
@@ -50,9 +55,11 @@ def receive_data(myclient):
             #print(myclient.identifier)
             data = json.loads(value)
             data = {int(k):v for k,v in data.items()}
+            print(data)
             return data 
-            #print(data)
             #print(str(data[1]["type"]) + ' ' + str(data[1]["x"]))
+
+
 
 
 while running:
@@ -97,7 +104,6 @@ while running:
         
         send_data(myclient, go)
         other_player_data = receive_data(myclient)
-
 
 
 

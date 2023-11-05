@@ -26,7 +26,6 @@ class Client:
         self.server_tcp = (server_host, server_port_tcp)
 
         self.register()
-        
 
     def create_room(self, room_name=None):
         """
@@ -40,21 +39,6 @@ class Client:
         self.sock_tcp.close()
         message = self.parse_data(data)
         self.room_id = message
-    
-    def get_nb_players_in_room(self):
-        """
-        Get the number of players in the current room.
-        """
-        message = json.dumps({"action": "nb_players", "payload": self.room_id, "identifier": self.identifier})
-        self.sock_tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock_tcp.connect(self.server_tcp)
-        self.sock_tcp.send(message.encode())
-        data = self.sock_tcp.recv(1024)
-        self.sock_tcp.close()
-        message = self.parse_data(data)
-        nb_players = message
-        return nb_players
-        
 
     def join_room(self, room_id):
         """

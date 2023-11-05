@@ -5,6 +5,7 @@ A simple strategy game using pygame
 05_11_23:
 - cleaning object creation and separation of map objects and buildings of the player.
 - numerical constants in a separate python file
+- Determining the player's number (1 or 2).
 
 04_11_23:
  - active/passive color
@@ -14,6 +15,7 @@ A simple strategy game using pygame
  - ability to create a peon from town
  - gameObject to handle all the objects created in the game (places, peons) and simplify main.py
  - draw other player's peon.
+ 
  
 
 
