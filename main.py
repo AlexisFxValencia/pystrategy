@@ -36,7 +36,7 @@ else:
 
 other_player_data = None
 
-print("I am player = " + n_player)
+print("I am player N°" + str(n_player))
 go = GameObjects(screen, n_player)
 
 

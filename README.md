@@ -21,6 +21,9 @@ A simple strategy game using pygame
 
 
 Todo list : 
+- test network connection with 2 computers
+- if a computer is disconnected, the server should see it and delete the player from its bank
+
 - add indicators for the player of what is happening
 - add delay in peon creation
  - time to get gold (delay)
