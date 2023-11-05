@@ -13,7 +13,7 @@ class Town(MapObject):
     def create_peon(self, keys):
         if self.active:
             if keys[pygame.K_m]:
-                if self.gold > TOWN_PEON_COST:
+                if self.gold >= TOWN_PEON_COST:
                     self.gold -= TOWN_PEON_COST
                     self.active = False
                     return True

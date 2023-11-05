@@ -86,6 +86,8 @@ class GameObjects:
                 peon_position_local =  pygame.Vector2(town.position.x, town.position.y) 
                 peon_position_local.x += town.radius
                 pe = Peon(peon_position_local)
+                next_z = self.peons[-1].z
+                pe.z = next_z + 1
                 self.peons.append(pe)
                 town.active = False
 
@@ -99,19 +101,22 @@ class GameObjects:
 
     def update_selected_object(self, mouse_vec):
         local_selected = None
-        for p in self.peons:
-            p.selected = False
-            p.check_selection_mouse(mouse_vec)                    
-            if p.selected:
-                self.selected_z = p.z
-                local_selected = p
-        for pl in self.buildings:
-            pl.selected = False
-            if pl.z > self.selected_z:
-                pl.check_selection_mouse(mouse_vec)   
-                if pl.selected:
-                    self.selected_z = pl.z
-                    local_selected = pl
+        for peon in self.peons:
+            peon.selected = False
+            if peon.z > self.selected_z:
+                peon.check_selection_mouse(mouse_vec)                    
+                if peon.selected:
+                    self.selected_z = peon.z
+                    local_selected = peon
+        
+        for building in self.buildings:
+            building.selected = False
+            if local_selected == None:
+                if building.z > self.selected_z:
+                    building.check_selection_mouse(mouse_vec)   
+                    if building.selected:
+                        self.selected_z = building.z
+                        local_selected = building
                     
         self.selected_object = local_selected
         self.selected_z = -1 
