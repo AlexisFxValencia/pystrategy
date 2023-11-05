@@ -99,7 +99,7 @@ class GameObjects:
         for building in self.buildings:
             building.active = True
 
-    def update_selected_object(self, mouse_vec):
+    def update_selected_object(self, mouse_vec):       
         local_selected = None
         for peon in self.peons:
             peon.selected = False
@@ -108,6 +108,10 @@ class GameObjects:
                 if peon.selected:
                     self.selected_z = peon.z
                     local_selected = peon
+        if local_selected != None:
+            for peon in self.peons:
+                peon.selected = False
+            local_selected.selected = True
         
         for building in self.buildings:
             building.selected = False
