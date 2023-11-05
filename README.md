@@ -15,7 +15,7 @@ A simple strategy game using pygame
  - ability to create a peon from town
  - gameObject to handle all the objects created in the game (places, peons) and simplify main.py
  - draw other player's peon.
- 
+ - ability to choose the server ip adress
  
 
 
