@@ -126,8 +126,8 @@ class GameObjects:
     def write_data(self):    
         #first_peon = self.peons[0]
         data = {}
-        for i, pe in enumerate(self.peons):
-            temp = {i : {"type" : "peon", "id" : 1, "x" : pe.position.x, "y" : pe.position.y}}
+        for i, peon in enumerate(self.peons):
+            temp = {i : {"type" : "peon", "id" : 1, "x" : peon.position.x, "y" : peon.position.y}}
             data.update(temp)
         return data
     

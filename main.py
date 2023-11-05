@@ -75,7 +75,7 @@ while running:
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("purple")    
     go.draws(screen)
-    print(other_player_data)
+    #print(other_player_data)
     go.draws_other_players(screen, other_player_data)
     go.plays(dt)
     

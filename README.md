@@ -4,6 +4,7 @@ A simple strategy game using pygame
 
 05_11_23:
 - cleaning object creation and separation of map objects and buildings of the player.
+- numberical constants in a separate file
 
 04_11_23:
  - active/passive color
