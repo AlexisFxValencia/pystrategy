@@ -74,9 +74,9 @@ while running:
 
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("purple")    
-    go.draw(screen)
+    go.draws(screen)
     print(other_player_data)
-    go.draw_other_players(screen, other_player_data)
+    go.draws_other_players(screen, other_player_data)
     go.plays(dt)
     
      
@@ -92,7 +92,7 @@ while running:
     # dt is measured in milliseconds, therefore 250 ms = 0.25 seconds
     if time_elapsed_since_last_action > 1:
         go.reactivate_peons()
-        go.reactivate_places()
+        go.reactivate_buildings()
         time_elapsed_since_last_action = 0 # reset it to 0 so you can count again
         
         send_data(myclient, go)
