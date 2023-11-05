@@ -69,13 +69,15 @@ class GameObjects:
         self.play_towns(keys, dt)
     
     def play_peons(self, keys, dt):
-        for pe in self.peons:
-            if pe.selected:
-                pe.update_position(keys, dt)
-                pe.mines(keys, self.map_objects[0])
-                pe.brings_back(keys, self.buildings[0])
+        if isinstance(self.selected_object, Peon):
+            peon = self.selected_object
+            peon.update_position(keys, dt)
+            peon.mines(keys, self.map_objects[0])
+            peon.brings_back(keys, self.buildings[0])
+        
+        for peon in self.peons:    
+            peon.moves_toward_B(dt)
             
-            pe.moves_toward_B(dt)
     
     def play_towns(self, keys, dt):
         if isinstance(self.selected_object, TownCenter):

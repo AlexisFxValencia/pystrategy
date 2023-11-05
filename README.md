@@ -2,7 +2,10 @@
 A simple strategy game using pygame
 
 
-04_11_23 :
+05_11_23:
+- cleaning object creation and separation of map objects and buildings of the player.
+
+04_11_23:
  - active/passive color
  - inheritance of a peon from place (which choose be called GameObject)
  - uniformisation of object selection with the mouse
@@ -10,6 +13,7 @@ A simple strategy game using pygame
  - ability to create a peon from town
  - gameObject to handle all the objects created in the game (places, peons) and simplify main.py
  - draw other player's peon.
+ 
 
 
 
